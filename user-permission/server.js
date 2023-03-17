@@ -1,9 +1,9 @@
 import express from "express";
 import { authRole, authUser } from "./basicAuth.js";
-import {  ROLE } from "./data.js";
+import { ROLE, users } from "./data.js";
 import projectRouter from "./routes/projects.js";
 const app = express();
-
+app.use(express.json());
 app.use(setUser);
 
 app.get("/", (req, res) => {
@@ -13,7 +13,7 @@ app.use("/projects", projectRouter);
 app.get("/dashboard", (req, res) => {
   res.send("Dashboard");
 });
-app.get("/amin", authUser, authRole(ROLE.ADMIN), (req, res) => {
+app.get("/admin", authUser, authRole(ROLE.ADMIN), (req, res) => {
   res.send("Admin Page");
 });
 
