@@ -1,6 +1,6 @@
 export default {
   port: 3000,
-  dbUri: 'mongodb://localhost:27017/user-api',
+  dbUri: 'mongodb://localhost:27017',
   logLevel: 'info',
   smtp: {
     user: 'xmlwoup4p2hsw4kr@ethereal.email',
