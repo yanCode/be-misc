@@ -11,6 +11,9 @@ const app = express();
 app.use(express.json());
 app.use('/v1/api', router);
 const port = config.get('port');
+app.all('*', (req, res) => {
+  res.status(404).send(`Cannot find ${req.originalUrl} on this server`);
+});
 app.listen(port, () => {
   log.info(`App started at localhost:${port}`);
   dbConnect();
