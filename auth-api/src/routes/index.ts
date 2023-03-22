@@ -9,6 +9,6 @@ router.get('/_health', (_, res) => {
 });
 
 router.use(authRoutes);
-router.use(userRoutes);
+router.use('/users', userRoutes);
 
 export default router;

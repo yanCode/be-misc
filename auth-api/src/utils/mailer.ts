@@ -1,5 +1,10 @@
-import { SendMailOptions } from 'nodemailer';
-// import config from 'config';
+import {
+  createTransport,
+  getTestMessageUrl,
+  SendMailOptions,
+} from 'nodemailer';
+import config from 'config';
+
 import { log } from './logger';
 
 // async function createTestCreds() {

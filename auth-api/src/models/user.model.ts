@@ -1,6 +1,7 @@
 import {
   DocumentType,
   getModelForClass,
+  index,
   modelOptions,
   pre,
   prop,
@@ -15,6 +16,7 @@ import { log } from '../utils/logger';
   this.password = await argon2.hash(this.password);
   next();
 })
+@index({ email: 1 })
 @modelOptions({
   schemaOptions: {
     timestamps: true,
