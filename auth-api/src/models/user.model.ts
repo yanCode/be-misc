@@ -42,7 +42,7 @@ export class User {
   verificationCode: string;
 
   @prop({ required: false })
-  passwordResetCode: string;
+  passwordResetCode: string | null;
 
   @prop({ default: false })
   verified: boolean;
