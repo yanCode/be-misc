@@ -54,3 +54,22 @@ export async function refreshAccessTokenHandler(req: Request, res: Response) {
   const accessToken = signAccessToken(user);
   return res.send({ accessToken });
 }
+
+export async function logoutHandler(req: Request, res: Response) {
+  const error_message = "You aren't logged in.";
+  const refreshToken = get(req, 'headers.refresh-token') as string;
+  const decoded = verifyJwt<{ session: string }>(
+    refreshToken,
+    'refreshTokenPublicKey'
+  );
+  if (!decoded) {
+    return res.status(401).send(error_message);
+  }
+  const session = await findSessionById(decoded.session);
+  if (!session || !session.valid) {
+    return res.status(401).send(error_message);
+  }
+  session.valid = false;
+  await session.save();
+  return res.send('Logout successfully');
+}
