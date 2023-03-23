@@ -8,6 +8,10 @@ export function createSession({ userId }: { userId: string }) {
   return SessionModel.create({ user: userId });
 }
 
+export function findSessionByUserId(userId: string) {
+  return SessionModel.findOne({ user: userId });
+}
+
 export function signAccessToken(user: DocumentType<User>) {
   const payload = omit(user.toJSON(), privateFields);
   return signJwt(payload, 'accessTokenPrivateKey', {
@@ -16,7 +20,13 @@ export function signAccessToken(user: DocumentType<User>) {
 }
 
 export async function signRefreshToken({ userId }: { userId: string }) {
-  const session = await createSession({ userId });
+  let session = await findSessionByUserId(userId);
+  if (session) {
+    session.valid = true;
+    await session.save();
+  } else {
+    session = await createSession({ userId });
+  }
   return signJwt({ session: session._id }, 'refreshTokenPrivateKey', {
     expiresIn: '1w',
   });
@@ -24,8 +34,4 @@ export async function signRefreshToken({ userId }: { userId: string }) {
 
 export function findSessionById(id: string) {
   return SessionModel.findById(id);
-}
-
-export function findSessionByUserId(userId: string) {
-  return SessionModel.findOne({ user: userId });
 }

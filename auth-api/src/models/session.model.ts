@@ -1,6 +1,7 @@
 import { User } from './user.model';
-import { getModelForClass, prop, Prop, Ref } from '@typegoose/typegoose';
+import { getModelForClass, index, prop, Prop, Ref } from '@typegoose/typegoose';
 
+@index({ user: 1 })
 export class Session {
   @Prop({ ref: () => User })
   user: Ref<User>;
