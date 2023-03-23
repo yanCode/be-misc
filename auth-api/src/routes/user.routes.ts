@@ -13,6 +13,7 @@ import {
   resetPasswordHandler,
   verifyUserHandler,
 } from '../controllers/user.contoller';
+import { requireLoggedUser } from '../middleware/requireLoggedUser';
 
 const router = express.Router();
 router.post('/', validateResource(createUserSchema), createUserHandler);
@@ -34,6 +35,6 @@ router.post(
   resetPasswordHandler
 );
 
-router.get('/me', getCurrentUserHandler);
+router.get('/me', requireLoggedUser, getCurrentUserHandler);
 
 export default router;

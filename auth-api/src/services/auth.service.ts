@@ -21,3 +21,7 @@ export async function signRefreshToken({ userId }: { userId: string }) {
     expiresIn: '1m',
   });
 }
+
+export function findSessionById(id: string) {
+  return SessionModel.findById(id);
+}
