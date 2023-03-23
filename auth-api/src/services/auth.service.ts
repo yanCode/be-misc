@@ -1,14 +1,15 @@
 import { DocumentType } from '@typegoose/typegoose';
-import { User } from '../models/user.model';
+import { privateFields, User } from '../models/user.model';
 import { signJwt } from '../utils/jwt';
 import { SessionModel } from '../models/session.model';
+import { omit } from 'lodash';
 
 export async function createSession({ userId }: { userId: string }) {
   return await SessionModel.create({ user: userId });
 }
 
 export function signAccessToken(user: DocumentType<User>) {
-  const payload = user.toJSON();
+  const payload = omit(user.toJSON(), privateFields);
   return signJwt(payload, 'accessTokenPrivateKey', {
     expiresIn: '7d',
   });

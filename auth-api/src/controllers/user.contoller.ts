@@ -110,3 +110,7 @@ export async function resetPasswordHandler(
   await user.save();
   return res.send('Password successfully reset');
 }
+
+export async function getCurrentUserHandler(req: Request, res: Response) {
+  return res.send(res.locals.user);
+}

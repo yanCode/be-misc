@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
+import { deserializeUser } from './middleware/deserializeUser';
 import express from 'express';
 import config from 'config';
 import dbConnect from './utils/DbConnect';
@@ -10,6 +11,7 @@ import router from './routes';
 
 const app = express();
 app.use(express.json());
+app.use(deserializeUser);
 app.use('/v1/api', router);
 const port = config.get('port');
 
