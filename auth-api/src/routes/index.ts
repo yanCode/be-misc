@@ -8,7 +8,7 @@ router.get('/_health', (_, res) => {
   res.send('OK');
 });
 
-router.use(authRoutes);
+router.use('/sessions', authRoutes);
 router.use('/users', userRoutes);
 
 export default router;
