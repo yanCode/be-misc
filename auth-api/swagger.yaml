@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: My service
-  description: My service
+  title: Auth-Api
+  description: The api doc of Auth-Api powered by Swagger.
   version: 1.0.0
 servers:
   - url: 'http://localhost:3000/v1/api/'
@@ -9,18 +9,41 @@ servers:
 
 components:
   securitySchemes:
-    apiKeyAuth:
-      type: apiKey
-      name: Authorization
-      in: header
-      description: Authorization token
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization in header Authorization.
   schemas:
+    UserMeOutput:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name
+        lastName:
+          type: string
+          description: last name
+        email:
+          type: string
+          description: User email
+        createdAt:
+          type: string
+          description: time of User created at
+        updatedAt:
+          type: string
+          description: time of latest User updated at
+
+
     UserRegisterInput:
       type: object
       properties:
-        name:
+        firstName:
           type: string
-          description: User name
+          description: First name
+        lastName:
+          type: string
+          description: last name
         email:
           type: string
           description: User email
@@ -36,28 +59,216 @@ paths:
   /_health:
     get:
       summary: Health check
-      description: Health check
+      description: What returns from this endpoint is the health of the server, if this endpoints returns error, please contact the admin.
       tags:
         - health
       responses:
         200:
           description: OK
+
+
   /users:
     post:
-      summary: Create user
-      description: Create user
+      summary: User Register
+      description: Create a user into the system awaiting verification.
       tags:
         - users
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/UserRegisterInput'
       responses:
         200:
-          description: OK
+          description: User successfully registered, and can be verified.
+        409:
+          description: email already exists.
         400:
-          description: Bad request
+          description: invalid input including 2 input passwords are not identical.
+
+  /users/verify/{id}/{verificationCode}:
+    post:
+      summary: Verify a registered user
+      description: Verify user
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          schema:
+            type: string
+        - name: verificationCode
+          in: path
+          description: Verification code returned in the email.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User successfully verified, and can log in.
+        400:
+          description: user already verified, or other issues like the user cannot be found.
 
 
+  /users/forgot-password:
+    post:
+      summary: Forgot password
+      description: user can request to reset the password in case forgetting it.
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User email
 
+      responses:
+        200:
+          description: User can receive an email in which contains a reset password code.
+        400:
+          description: User doesn't receive email in case of errors like the account hasn't be verified, or doesn't exist.
+
+  /users/reset-password/{id}/{passwordResetCode}:
+    post:
+      summary: Reset password
+      description: reset the password via id and passwordResetCode.
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          schema:
+            type: string
+        - name: passwordResetCode
+          in: path
+          description: Reset code returned in the email.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: User password
+                passwordConfirmation:
+                  type: string
+                  description: User password confirmation
+
+      responses:
+        200:
+          description: User successfully reset the password, and hence the user can log in.
+        400:
+          description: The reset failed.
+
+  /users/me:
+    get:
+      summary: Get current user
+      description: Get current user
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - users
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeOutput'
+          description: User successfully retrieved.
+        400:
+          description: User not found.
+
+  /sessions:
+    post:
+      summary: Login
+      description: Login
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User email
+                password:
+                  type: string
+                  description: User password
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: JWT access token
+                  refreshToken:
+                    type: string
+                    description: JWT refresh token
+
+          description: User successfully logged in returning accessToken & refreshToken.
+        400:
+          description: invalid email or password.
+
+  /sessions/refresh:
+    post:
+      summary: Refresh access token
+      description: Refresh access token to renew the expired token.
+      parameters:
+        - in: header
+          name: refresh-token
+          required: true
+          schema:
+            type: string
+
+      tags:
+        - auth
+
+
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: renewed JWT access token
+          description: User successfully refreshed accessToken.
+
+  /sessions/logout:
+    post:
+      summary: Logout
+      description: Logout logged user by refresh token.
+      parameters:
+        - in: header
+          name: refresh-token
+          required: true
+          schema:
+            type: string
+      tags:
+        - auth
+      responses:
+        200:
+          description: User successfully logged out.

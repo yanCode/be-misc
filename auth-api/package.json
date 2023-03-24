@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "npx ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/app.ts",
+    "dev": "npx nodemon",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --fix --ext .ts,.tsx"
   },

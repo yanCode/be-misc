@@ -31,7 +31,7 @@ export async function createUserHandler(
     if (e.code === 11000) {
       return res.status(409).send('account already exists');
     }
-    res.status(500).send(e);
+    res.status(400).send(e);
   }
 }
 

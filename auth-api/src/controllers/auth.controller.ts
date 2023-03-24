@@ -41,18 +41,18 @@ export async function refreshAccessTokenHandler(req: Request, res: Response) {
     'refreshTokenPublicKey'
   );
   if (!decoded) {
-    return res.status(401).send('Invalid refresh token');
+    return res.status(400).send('Invalid refresh token');
   }
   const session = await findSessionById(decoded.session);
   if (!session || !session.valid) {
-    return res.status(401).send('Invalid refresh token');
+    return res.status(400).send('Invalid refresh token');
   }
   const user = await findUserById(String(session.user));
   if (!user) {
-    return res.status(401).send('Invalid refresh token');
+    return res.status(400).send('Invalid refresh token');
   }
   const accessToken = signAccessToken(user);
-  return res.send({ accessToken });
+  return res.status(200).send({ accessToken });
 }
 
 export async function logoutHandler(req: Request, res: Response) {
@@ -63,11 +63,11 @@ export async function logoutHandler(req: Request, res: Response) {
     'refreshTokenPublicKey'
   );
   if (!decoded) {
-    return res.status(401).send(error_message);
+    return res.status(400).send(error_message);
   }
   const session = await findSessionById(decoded.session);
   if (!session || !session.valid) {
-    return res.status(401).send(error_message);
+    return res.status(400).send(error_message);
   }
   session.valid = false;
   await session.save();
