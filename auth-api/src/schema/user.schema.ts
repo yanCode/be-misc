@@ -1,4 +1,5 @@
 import { object, string, TypeOf } from 'zod';
+import mongoose from 'mongoose';
 
 export const createUserSchema = object({
   body: object({
@@ -29,7 +30,9 @@ export const createUserSchema = object({
 
 export const verifyUserSchema = object({
   params: object({
-    id: string(),
+    id: string().refine((data) => mongoose.Types.ObjectId.isValid(data), {
+      message: 'id must be an ObjectId',
+    }),
     verificationCode: string(),
   }),
 });
@@ -43,7 +46,12 @@ export const forgotPasswordSchema = object({
 });
 
 export const resetPasswordSchema = object({
-  params: object({ id: string(), passwordResetCode: string() }),
+  params: object({
+    id: string().refine((data) => mongoose.Types.ObjectId.isValid(data), {
+      message: 'id must be an ObjectId',
+    }),
+    passwordResetCode: string(),
+  }),
   body: object({
     password: string({ required_error: 'Password is required' }).min(
       6,
