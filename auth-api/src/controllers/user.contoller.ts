@@ -10,9 +10,9 @@ import {
   findUserByEmail,
   findUserById,
 } from 'src/services/user.service';
-import { sendEmail } from '../utils/mailer';
+import { sendEmail } from 'src/utils/mailer.utils';
 import { nanoid } from 'nanoid';
-import { log } from 'src/utils/logger';
+import { log } from 'src/utils/logger.utils';
 
 export async function createUserHandler(
   req: Request<unknown, unknown, CreateUserInput>,

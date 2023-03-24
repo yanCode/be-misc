@@ -9,7 +9,7 @@ import {
 } from '@typegoose/typegoose';
 import { nanoid } from 'nanoid';
 import argon2 from 'argon2';
-import { log } from 'src/utils/logger';
+import { log } from 'src/utils/logger.utils';
 
 export const privateFields = [
   'password',

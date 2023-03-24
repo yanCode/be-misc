@@ -1,8 +1,8 @@
 import { deserializeUser } from './middleware/deserializeUser';
 import express from 'express';
 import config from 'config';
-import dbConnect from './utils/DbConnect';
-import { log } from './utils/logger';
+import dbConnect from './utils/DbConnect.utils';
+import { log } from './utils/logger.utils';
 import router from './routes';
 
 const app = express();

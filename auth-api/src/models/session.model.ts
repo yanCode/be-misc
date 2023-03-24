@@ -1,4 +1,4 @@
-import { User } from './user.model';
+import { User } from 'src/models/user.model';
 import { getModelForClass, index, prop, Prop, Ref } from '@typegoose/typegoose';
 
 @index({ user: 1 })

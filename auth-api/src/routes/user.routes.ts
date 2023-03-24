@@ -1,5 +1,5 @@
 import express from 'express';
-import validateResource from '../middleware/validateResource';
+import validateResource from 'src/middleware/validateResource';
 import {
   createUserSchema,
   forgotPasswordSchema,

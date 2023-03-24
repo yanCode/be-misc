@@ -1,4 +1,4 @@
-import { findUserByEmail, findUserById } from '../services/user.service';
+import { findUserByEmail, findUserById } from 'src/services/user.service';
 import { Request, Response } from 'express';
 import {
   CreateSessionInput,
@@ -10,7 +10,7 @@ import {
   signRefreshToken,
 } from 'src/services/auth.service';
 import { get } from 'lodash';
-import { verifyJwt } from 'src/utils/jwt';
+import { verifyJwt } from 'src/utils/jwt.utils';
 
 export async function createSessionHandler(
   req: Request<unknown, unknown, CreateSessionInput>,
