@@ -5,14 +5,14 @@ import {
   forgotPasswordSchema,
   resetPasswordSchema,
   verifyUserSchema,
-} from '../schema/user.schema';
+} from 'src/schema/user.schema';
 import {
   createUserHandler,
   forgotPasswordHandler,
   getCurrentUserHandler,
   resetPasswordHandler,
   verifyUserHandler,
-} from '../controllers/user.contoller';
+} from 'src/controllers/user.contoller';
 import { requireLoggedUser } from '../middleware/requireLoggedUser';
 
 const router = express.Router();

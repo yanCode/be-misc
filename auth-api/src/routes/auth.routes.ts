@@ -1,11 +1,11 @@
 import express from 'express';
-import validateResource from '../middleware/validateResource';
-import { createSessionSchema } from '../schema/auth.schema';
+import validateResource from 'src/middleware/validateResource';
+import { createSessionSchema } from 'src/schema/auth.schema';
 import {
   createSessionHandler,
   logoutHandler,
   refreshAccessTokenHandler,
-} from '../controllers/auth.controller';
+} from 'src/controllers/auth.controller';
 
 const router = express.Router();
 router.post('/', validateResource(createSessionSchema), createSessionHandler);

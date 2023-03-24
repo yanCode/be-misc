@@ -4,15 +4,15 @@ import {
   ForgotPasswordInput,
   ResetPasswordInput,
   VerifyUserInput,
-} from '../schema/user.schema';
+} from 'src/schema/user.schema';
 import {
   createUser,
   findUserByEmail,
   findUserById,
-} from '../services/user.service';
+} from 'src/services/user.service';
 import { sendEmail } from '../utils/mailer';
 import { nanoid } from 'nanoid';
-import { log } from '../utils/logger';
+import { log } from 'src/utils/logger';
 
 export async function createUserHandler(
   req: Request<unknown, unknown, CreateUserInput>,

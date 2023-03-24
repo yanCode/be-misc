@@ -1,7 +1,7 @@
 import { DocumentType } from '@typegoose/typegoose';
-import { privateFields, User } from '../models/user.model';
-import { signJwt } from '../utils/jwt';
-import { SessionModel } from '../models/session.model';
+import { privateFields, User } from 'src/models/user.model';
+import { signJwt } from 'src/utils/jwt';
+import { SessionModel } from 'src/models/session.model';
 import { omit } from 'lodash';
 
 export function createSession({ userId }: { userId: string }) {

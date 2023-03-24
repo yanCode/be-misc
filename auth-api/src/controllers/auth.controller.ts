@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 import {
   CreateSessionInput,
   VAGUE_CREATE_SESSION_FAILED_MESSAGE,
-} from '../schema/auth.schema';
+} from 'src/schema/auth.schema';
 import {
   findSessionById,
   signAccessToken,
   signRefreshToken,
-} from '../services/auth.service';
+} from 'src/services/auth.service';
 import { get } from 'lodash';
-import { verifyJwt } from '../utils/jwt';
+import { verifyJwt } from 'src/utils/jwt';
 
 export async function createSessionHandler(
   req: Request<unknown, unknown, CreateSessionInput>,
