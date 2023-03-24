@@ -1,0 +1,11 @@
+{
+  "watch": [
+    "./src",
+    "./swagger.yaml"
+  ],
+  "ext": "ts,json,yaml",
+  "ignore": [
+    "src/**/*.spec.ts"
+  ],
+  "exec": "npx ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/app.ts"
+}
