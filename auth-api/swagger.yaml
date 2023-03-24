@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: My service
+  description: My service
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000/v1/api/'
+    description: Local dev server
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: Authorization token
+  schemas:
+    UserRegisterInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User name
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+        passwordConfirmation:
+          type: string
+          description: User password confirmation
+
+
+paths:
+  /_health:
+    get:
+      summary: Health check
+      description: Health check
+      tags:
+        - health
+      responses:
+        200:
+          description: OK
+  /users:
+    post:
+      summary: Create user
+      description: Create user
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterInput'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request
+
+
+

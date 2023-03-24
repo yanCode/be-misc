@@ -14,6 +14,8 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/lodash": "^4.14.191",
     "@types/nodemailer": "^6.4.7",
+    "@types/swagger-ui-express": "^4.1.3",
+    "@types/yamljs": "^0.2.31",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "eslint": "^8.36.0",
@@ -39,6 +41,8 @@
     "nanoid": "3.3.4",
     "nodemailer": "^6.9.1",
     "pino": "^8.11.0",
+    "swagger-ui-express": "^4.6.2",
+    "yamljs": "^0.3.0",
     "zod": "^3.21.4"
   }
 }

@@ -1,15 +1,17 @@
-import { deserializeUser } from './middleware/deserializeUser';
 import express from 'express';
 import config from 'config';
 import dbConnect from './utils/DbConnect.utils';
 import { log } from './utils/logger.utils';
-import router from './routes';
+import swaggerDocs from 'src/utils/swagger.utils';
+import { deserializeUser } from 'src/middleware/deserializeUser';
+import router from 'src/routes';
 
 const app = express();
+const port = config.get<number>('port');
+swaggerDocs(app, port);
 app.use(express.json());
 app.use(deserializeUser);
 app.use('/v1/api', router);
-const port = config.get('port');
 
 app.all('*', (req, res) => {
   res.status(404).send(`Cannot find ${req.originalUrl} on this server`);
