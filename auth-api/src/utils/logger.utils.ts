@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 const level = config.get<string>('logLevel');
 
 export const log = logger({
-  transport: { target: 'pino-pretty' },
+  // transport: { target: 'pino-pretty' },
   level,
   base: { pid: false },
   timestamp: () => `,"time":"${dayjs().format()}"`,
