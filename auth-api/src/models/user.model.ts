@@ -24,7 +24,7 @@ export const privateFields = [
   this.password = await argon2.hash(this.password);
   next();
 })
-@index({ email: 1 })
+@index({ email: 1 }, { unique: true })
 @modelOptions({
   schemaOptions: {
     timestamps: true,

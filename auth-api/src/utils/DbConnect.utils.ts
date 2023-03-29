@@ -8,7 +8,9 @@ async function dBConnect() {
     await mongoose.connect(dbUri, {
       user: 'root',
       pass: 'password',
-      dbName: 'user-api',
+      dbName: 'user-api-test',
+      connectTimeoutMS: 1000,
+      socketTimeoutMS: 1000,
     });
     log.info('connected to DB...');
   } catch (e) {

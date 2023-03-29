@@ -2,3 +2,4 @@
 .idea
 auth-api/mongodb_data/
 auth-api/.env
+coverage

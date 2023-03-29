@@ -48,7 +48,6 @@ describe('User Service', () => {
         try {
           await createUser(user);
         } catch (e: any) {
-          console.log('call me');
           expect(e.code).toBe(11000);
         }
       });
