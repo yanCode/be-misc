@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { Express } from 'express';
 import { deserializeUser } from 'src/middleware/deserializeUser';
 import router from 'src/routes';
 import swaggerDocs from 'src/utils/swagger.utils';
 import config from 'config';
 
-export function createServer() {
+export function createServer(): Express {
   const port = config.get<number>('port');
   const app = express();
   app.use(express.json());

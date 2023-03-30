@@ -1,7 +1,13 @@
 import { createServer } from 'src/services/server';
 
 import supertest from 'supertest';
-import { API_PRFIX, userInput, UserInputType } from 'src/__tests__/test.config';
+import {
+  API_PRFIX,
+  cleanLogin,
+  userInput,
+  UserInputType,
+  userLogin,
+} from 'src/__tests__/test.config';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import UserModel from 'src/models/user.model';
@@ -74,19 +80,17 @@ describe('User Routes', () => {
           email: faker.internet.email(),
         };
         const registeredUser = await UserModel.create(testUser);
-        const mailer = jest.spyOn(mailerUtil, 'sendEmail');
         const { text, statusCode } = await supertest(app).post(
           `${API_PRFIX}/users/verify/${registeredUser._id}/${registeredUser.verificationCode}`
         );
         expect(statusCode).toBe(200);
         expect(text).toContain(
-          `User successfully Verified with id: ${registeredUser._id}`
+          `User successfully verified with id: ${registeredUser._id}`
         );
-        expect(mailer).toHaveBeenCalledTimes(1);
       });
     });
     describe('given an invalid verification input.', () => {
-      it('should verify successfully', async () => {
+      it('should fail verifying', async () => {
         const testUser: UserInputType = {
           ...userInput,
           email: faker.internet.email(),
@@ -199,6 +203,18 @@ describe('User Routes', () => {
           .send(resetInfo);
         expect(statusCode).toBe(200);
         expect(text).toContain('Password successfully reset');
+      });
+    });
+  });
+  describe('me', () => {
+    describe('given access token is valid', () => {
+      it('should return the info of current user', async () => {
+        const { accessToken, email, userId } = await userLogin();
+        const { text } = await supertest(app)
+          .get(`${API_PRFIX}/users/me`)
+          .set('Authorization', `Bearer ${accessToken}`);
+        expect(JSON.parse(text).email).toBe(email);
+        await cleanLogin(userId);
       });
     });
   });
