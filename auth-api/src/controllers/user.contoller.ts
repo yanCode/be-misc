@@ -31,8 +31,7 @@ export async function createUserHandler(
     if (e.code === 11000) {
       return res.status(409).send('account already exists');
     }
-    log.error(e);
-    res.status(400).send(e.message ?? e);
+    return res.status(400).send(e.message ?? e);
   }
 }
 
@@ -71,9 +70,9 @@ export async function forgotPasswordHandler(
     return res.send(message);
   }
   if (!user.verified) {
-    return res.send(
-      'This user cannot be reset password, please contact admin.'
-    );
+    return res
+      .status(400)
+      .send('This user cannot be reset password, please verify it first.');
   }
 
   user.passwordResetCode = nanoid();
@@ -103,7 +102,7 @@ export async function resetPasswordHandler(
     !user.passwordResetCode ||
     user.passwordResetCode !== passwordResetCode
   ) {
-    return res.send('Invalid password reset code');
+    return res.status(400).send('Invalid password reset code');
   }
 
   user.passwordResetCode = null;
