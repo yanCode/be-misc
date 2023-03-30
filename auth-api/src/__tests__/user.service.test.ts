@@ -14,13 +14,11 @@ const userMongoInput = omit(userInput, 'passwordConfirmation');
 beforeAll(async () => {
   const mongoServer = await MongoMemoryServer.create();
   await mongoose.connect(mongoServer.getUri());
-  console.log('connected');
   // await dBConnect();
 });
 afterAll(async () => {
   await UserModel.collection.drop();
   await mongoose.disconnect();
-  console.log('closing');
   await mongoose.connection.close();
 });
 
@@ -37,7 +35,7 @@ describe('User Service', () => {
     });
 
     describe('given a user input whose email is duplicated', () => {
-      it('should return an 11000 error', async () => {
+      it('should return a duplicated-email error', async () => {
         expect.assertions(2);
         const user = {
           ...userMongoInput,
@@ -82,7 +80,7 @@ describe('User Service', () => {
       });
 
       describe('given an invalid user id', () => {
-        it('should return null', async () => {
+        it('should return null as the User', async () => {
           const invalidUserId = new mongoose.Types.ObjectId();
           const response = await findUserById(invalidUserId.toString());
           expect(response).toBeNull();
@@ -91,7 +89,7 @@ describe('User Service', () => {
     });
     describe(' findUserByEmail method:', () => {
       describe('given an invalid email', () => {
-        it('should return null', async () => {
+        it('should return null as the user', async () => {
           const response = await findUserByEmail('invalid@email.com');
           expect(response).toBeNull();
         });

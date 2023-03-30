@@ -47,7 +47,7 @@ describe('Auth Routes', () => {
       });
     });
     describe('given incorrect email & password', () => {
-      it('should login successfully', async () => {
+      it('should complain invalid email or password', async () => {
         const testUser: UserInputType = {
           ...userInput,
           email: faker.internet.email(),
