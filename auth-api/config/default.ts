@@ -1,6 +1,16 @@
+import { ConnectOptions } from 'mongoose';
+import { SmtpOptions } from 'src/typings';
+
 export default {
   port: 3000,
   dbUri: 'mongodb://localhost:27017',
+  dbConnectOpts: {
+    user: 'root',
+    pass: 'password',
+    dbName: 'user-api',
+    connectTimeoutMS: 1000,
+    socketTimeoutMS: 1000,
+  } as ConnectOptions,
   logLevel: 'info',
   accessTokenPrivateKey: '',
   refreshTokenPrivateKey: '',
@@ -10,5 +20,5 @@ export default {
     host: 'smtp.ethereal.email',
     port: 587,
     secure: false,
-  },
+  } as SmtpOptions,
 };

@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import { signAccessToken, signRefreshToken } from 'src/services/auth.service';
 import { SessionModel } from 'src/models/session.model';
 
-export const API_PRFIX = '/v1/api';
+export const API_PREFIX = '/v1/api';
 export const userInput = {
   firstName: 'Davin',
   lastName: 'Lind',

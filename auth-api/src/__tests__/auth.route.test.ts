@@ -3,7 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import {
-  API_PRFIX,
+  API_PREFIX,
   cleanLogin,
   userInput,
   UserInputType,
@@ -37,7 +37,7 @@ describe('Auth Routes', () => {
         registeredUser.verified = true;
         await registeredUser.save();
         const { statusCode, text } = await supertest(app)
-          .post(API_PRFIX + '/sessions')
+          .post(API_PREFIX + '/sessions')
           .send({
             email: testUser.email,
             password: testUser.password,
@@ -56,7 +56,7 @@ describe('Auth Routes', () => {
         registeredUser.verified = true;
         await registeredUser.save();
         const { statusCode, text } = await supertest(app)
-          .post(API_PRFIX + '/sessions')
+          .post(API_PREFIX + '/sessions')
           .send({
             email: testUser.email,
             //provide random password
@@ -72,7 +72,7 @@ describe('Auth Routes', () => {
       it('a newly generated accessToken should be returned', async () => {
         const { accessToken, refreshToken, userId } = await userLogin();
         const { statusCode, text } = await supertest(app)
-          .post(API_PRFIX + '/sessions/refresh')
+          .post(API_PREFIX + '/sessions/refresh')
           .set('refresh-token', refreshToken);
         expect(statusCode).toBe(200);
         expect(JSON.parse(text).accessToken).not.toBe(accessToken);
@@ -84,7 +84,7 @@ describe('Auth Routes', () => {
       it('an error should return', async () => {
         const { userId } = await userLogin();
         const { statusCode, text } = await supertest(app)
-          .post(API_PRFIX + '/sessions/refresh')
+          .post(API_PREFIX + '/sessions/refresh')
           .set('refresh-token', 'invalid-refresh-token');
         expect(statusCode).toBe(400);
         expect(text).toBe('Invalid refresh token');
@@ -97,7 +97,7 @@ describe('Auth Routes', () => {
       it('should logout successfully', async () => {
         const { userId, refreshToken } = await userLogin();
         const { statusCode, text } = await supertest(app)
-          .post(API_PRFIX + '/sessions/logout')
+          .post(API_PREFIX + '/sessions/logout')
           .set('refresh-token', refreshToken);
         expect(statusCode).toBe(200);
         expect(text).toBe('Logout successfully');
@@ -112,7 +112,7 @@ describe('Auth Routes', () => {
           { $set: { valid: false } }
         );
         const { statusCode, text } = await supertest(app)
-          .post(API_PRFIX + '/sessions/logout')
+          .post(API_PREFIX + '/sessions/logout')
           .set('refresh-token', 'invalid-refresh-token');
         expect(statusCode).toBe(400);
         expect(text).toBe("You aren't logged in.");
