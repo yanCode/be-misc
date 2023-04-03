@@ -16,7 +16,7 @@ export async function createUser(input: RegisterUserInput) {
 }
 
 export async function findUserByEmailOrUsername(
-  emailOrUsername: LoginInput['usernameOrEmail']
+  emailOrUsername: LoginInput['usernameOrEmail'],
 ) {
   return prisma.user.findFirst({
     where: {
@@ -29,11 +29,33 @@ export async function findUserByEmailOrUsername(
 }
 
 export async function verifyPassword({
-  password,
-  candidatePassword,
-}: {
+                                       password,
+                                       candidatePassword,
+                                     }: {
   password: string;
   candidatePassword: string;
 }) {
   return argon2.verify(password, candidatePassword);
 }
+
+export async function followUser({
+                                   userId,
+                                   username,
+                                 }: { userId: string, username: string }) {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      following: {
+        connect: {
+          username,
+        },
+      },
+    },
+  });
+
+}
+ export async function findUsers() {
+   return prisma.user.findMany()
+  }
