@@ -1,6 +1,6 @@
-import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql';
+import { Arg, Authorized, Ctx, FieldResolver, Info, Mutation, Query, Resolver, Root } from 'type-graphql';
 import { prisma } from '../utils/prisma';
-import { CreateMessageInput, Message } from './message.dto';
+import { CreateMessageInput, Message, PaginatedMessageResponse } from './message.dto';
 import { Context } from '../utils/createServer';
 import { createMessage } from './message.service';
 import { findUserById } from '../user/user.service';
@@ -11,14 +11,21 @@ export class MessageResolver {
   async messages() {
     return prisma.message.findMany();
   }
-
+  @Query(() => PaginatedMessageResponse)
+  async messagePage(){
+    return { //todo fix this logic.
+      items: await prisma.message.findMany(),
+      total: await prisma.message.count(),
+      hasMore: true,
+    }
+  }
   @FieldResolver()
-  async user(@Root() message: Message) {
+  async user(@Root() message: Message, @Info() info: any) {
     return findUserById(message.userId);
   }
 
   @Authorized()
-  @Mutation()
+  @Mutation(()=>Message)
   async createMessage(@Arg('input') input: CreateMessageInput, @Ctx() context: Context) {
     return createMessage({ ...input, userId: context.user!.id });
   }

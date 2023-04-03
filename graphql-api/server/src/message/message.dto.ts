@@ -1,6 +1,7 @@
-import { Field, ID, InputType, ObjectType } from 'type-graphql';
+import { ClassType, Field, ID, InputType, Int, ObjectType } from 'type-graphql';
 import { Length } from 'class-validator';
 import { User } from '../user/user.dto';
+import PaginatedResponse from '../utils/PaginatedResponse';
 
 @InputType()
 export class CreateMessageInput {
@@ -23,8 +24,14 @@ export class Message {
   @Field(() => String, { nullable: false })
   userId: string;
   @Field()
-  createdAt: string;
- @Field()
-  updatedAt: string; //todo mapping to Date Scalar.
+  createdAt: Date;
+  @Field()
+  updatedAt: Date;
 
 }
+@ObjectType()
+export class PaginatedMessageResponse extends PaginatedResponse(Message) {}
+
+
+
+

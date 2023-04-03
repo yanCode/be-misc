@@ -7,6 +7,7 @@ import { User } from '../user/user.dto';
 import { authCheck } from './AuthCheck';
 import { MessageResolver } from '../message/message.resolver';
 
+
 const fastify = Fastify({ logger: false });
 
 export interface Context {

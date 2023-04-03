@@ -1,4 +1,4 @@
-import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql';
 import { FollowerInput, LoginInput, RegisterUserInput, User, UserFollowers } from './user.dto';
 import {
   createUser,
@@ -65,29 +65,22 @@ class UserResolver {
   }
 
   @FieldResolver(() => UserFollowers)
-  followers() {
+  followers(@Root() user: User) {
+    //use @Root() user:User
     return {
       count: 1,
       items: [
-        {
-          id: '1',
-          username: 'test_followers',
-          email: 'test_followers@gmail.com',
-        },
+        { ...user },
       ],
     };
   }
 
   @FieldResolver(() => UserFollowers) //todo
-  following() {
+  following(@Root() user: User) {
     return {
       count: 1,
       items: [
-        {
-          id: '1',
-          username: 'test_followers',
-          email: 'test_followers@gmail.com',
-        },
+        user
       ],
     };
   }
