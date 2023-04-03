@@ -1,7 +1,14 @@
 import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver } from 'type-graphql';
 import { FollowerInput, LoginInput, RegisterUserInput, User, UserFollowers } from './user.dto';
-import { createUser, findUserByEmailOrUsername, findUsers, followUser, verifyPassword } from './user.service';
-import { MyContext } from '../utils/createServer';
+import {
+  createUser,
+  findUserByEmailOrUsername,
+  findUsers,
+  followUser,
+  unfollowUser,
+  verifyPassword,
+} from './user.service';
+import { Context } from '../utils/createServer';
 
 @Resolver(() => User)
 class UserResolver {
@@ -17,7 +24,7 @@ class UserResolver {
 
   @Authorized()
   @Query(() => User)
-  me(@Ctx() context: MyContext) {
+  me(@Ctx() context: Context) {
     console.log(context);
     return {
       id: '1',
@@ -27,7 +34,7 @@ class UserResolver {
   }
 
   @Mutation(() => String)
-  async login(@Arg('input') input: LoginInput, @Ctx() context: MyContext) {
+  async login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
     const user = await findUserByEmailOrUsername(input.usernameOrEmail);
     if (!user) {
       throw new Error('invalid credentials');
@@ -71,7 +78,7 @@ class UserResolver {
     };
   }
 
-  @FieldResolver(() => UserFollowers)
+  @FieldResolver(() => UserFollowers) //todo
   following() {
     return {
       count: 1,
@@ -90,11 +97,16 @@ class UserResolver {
     return findUsers();
   }
 
+  @Authorized()
   @Mutation(() => User)
-  async followUser(@Arg('input') input: FollowerInput, @Ctx() context: MyContext) {
-    const result = await followUser({ ...input, userId: context.user?.id! });
+  async followUser(@Arg('input') input: FollowerInput, @Ctx() context: Context) {
+    return await followUser({ ...input, userId: context.user?.id! });
+  }
 
-
+  @Authorized()
+  @Mutation(() => User)
+  async unfollowUser(@Arg('input') input: FollowerInput, @Ctx() context: Context) {
+    return await unfollowUser({ ...input, userId: context.user?.id! });
   }
 }
 

@@ -5,10 +5,11 @@ import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { ApolloFastifyContextFunction, fastifyApolloDrainPlugin } from '@as-integrations/fastify';
 import { User } from '../user/user.dto';
 import { authCheck } from './AuthCheck';
+import { MessageResolver } from '../message/message.resolver';
 
 const fastify = Fastify({ logger: false });
 
-export interface MyContext {
+export interface Context {
   request: FastifyRequest;
   reply: FastifyReply;
   user?: CtxUser;
@@ -18,11 +19,11 @@ type CtxUser = Omit<User, 'password'>;
 
 export async function createServer() {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, MessageResolver],
     authChecker: authCheck
   });
 
-  const contextFunction: ApolloFastifyContextFunction<MyContext> = async (
+  const contextFunction: ApolloFastifyContextFunction<Context> = async (
     request,
     reply,
   ) => {
@@ -55,7 +56,7 @@ export async function createServer() {
     }
   };
 
-  const server = new ApolloServer<MyContext>({
+  const server = new ApolloServer<Context>({
     schema,
     plugins: [fastifyApolloDrainPlugin(fastify)],
   });

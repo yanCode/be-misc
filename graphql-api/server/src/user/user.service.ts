@@ -56,6 +56,32 @@ export async function followUser({
   });
 
 }
- export async function findUsers() {
-   return prisma.user.findMany()
-  }
+export async function unfollowUser({
+                                   userId,
+                                   username,
+                                 }: { userId: string, username: string }) {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      following: {
+        disconnect: { //todo
+          username,
+        },
+      },
+    },
+  });
+
+}
+export async function findUserById(userId:string){
+  return prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+}
+
+export async function findUsers() {
+  return prisma.user.findMany();
+}
