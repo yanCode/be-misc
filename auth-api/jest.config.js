@@ -7,6 +7,7 @@ module.exports = {
   testTimeout: 30000,
   forceExit: true,
   detectOpenHandles: true,
+  coveragePathIgnorePatterns: ['/node_modules/', '/src/utils/swagger.utils.ts'],
   clearMocks: true,
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1',

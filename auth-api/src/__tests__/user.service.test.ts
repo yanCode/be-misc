@@ -6,21 +6,9 @@ import {
 import { userInput } from './test.config';
 import { omit } from 'lodash';
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import UserModel from 'src/models/user.model';
 
 const userMongoInput = omit(userInput, 'passwordConfirmation');
-
-beforeAll(async () => {
-  const mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri());
-  // await dBConnect();
-});
-afterAll(async () => {
-  await UserModel.collection.drop();
-  await mongoose.disconnect();
-  await mongoose.connection.close();
-});
 
 describe('User Service', () => {
   describe(' createUser method', () => {

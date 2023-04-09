@@ -8,24 +8,12 @@ import {
   UserInputType,
   userLogin,
 } from 'src/__tests__/test.config';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import mongoose from 'mongoose';
 import UserModel from 'src/models/user.model';
 import * as mailerUtil from 'src/utils/mailer.utils';
 import { faker } from '@faker-js/faker';
 import { nanoid } from 'nanoid';
 
 const app = createServer();
-
-beforeAll(async () => {
-  const mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri());
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoose.connection.close();
-});
 
 describe('User Routes', () => {
   describe('User Register', () => {
@@ -163,7 +151,7 @@ describe('User Routes', () => {
       });
     });
     describe('given an user who has not been verified', () => {
-      it('should allow to reset password', async () => {
+      it('should not allow to reset password', async () => {
         const testUser: UserInputType = {
           ...userInput,
           email: faker.internet.email(),

@@ -3,6 +3,8 @@ import UserModel from 'src/models/user.model';
 import { pick } from 'lodash';
 import { signAccessToken, signRefreshToken } from 'src/services/auth.service';
 import { SessionModel } from 'src/models/session.model';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 
 export const API_PREFIX = '/v1/api';
 export const userInput = {
@@ -46,3 +48,13 @@ export const cleanLogin = async (userId: string) => {
 };
 
 export type UserInputType = typeof userInput;
+
+beforeAll(async () => {
+  const mongoServer = await MongoMemoryServer.create();
+  await mongoose.connect(mongoServer.getUri());
+});
+
+afterAll(async () => {
+  await mongoose.disconnect();
+  await mongoose.connection.close();
+});
