@@ -4,13 +4,14 @@ import {
   CreateSessionInput,
   VAGUE_CREATE_SESSION_FAILED_MESSAGE,
 } from 'src/schema/auth.schema';
+
+import { get } from 'lodash';
+import { verifyJwt } from 'src/utils/jwt.utils';
 import {
   findSessionById,
   signAccessToken,
   signRefreshToken,
 } from 'src/services/auth.service';
-import { get } from 'lodash';
-import { verifyJwt } from 'src/utils/jwt.utils';
 
 export async function createSessionHandler(
   req: Request<unknown, unknown, CreateSessionInput>,

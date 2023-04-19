@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "npx nodemon",
+    "start": "npx ts-node -r tsconfig-paths/register src/app.ts",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage",
